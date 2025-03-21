@@ -7,3 +7,11 @@
     }
     else next();
 }
+export const UserAuth=(req,res,next)=>{
+            const token="xyz";
+            const authenticate=token==='xyz';
+            if(!authenticate){
+                res.status.send(401);
+            }
+            else next();
+}
