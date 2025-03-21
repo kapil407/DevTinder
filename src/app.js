@@ -33,6 +33,20 @@ app.use('/user/getdata',UserAuth,(req,res)=>{
     res.send("sent data");
 });
 
+app.use('/',(req,res)=>{
+    try{
+    throw new Error("Something went wrong!");
+    res.send("data fetch sucessfully!!");
+    }
+    catch(err){
+        res.send("went wrong ");
+    }
+
+
+});
+app.use('/',(err,req,res,next)=>{
+    res.status(500).send("some thing went wrong");
+})
 
 
 
