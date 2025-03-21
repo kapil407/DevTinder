@@ -15,21 +15,15 @@ import { auth,UserAuth } from "../Middleware/Authentication.js";
 
 // AUTHENTICATION USING MIDDLEWARE FUNCTION
 
-app.use('/admin',auth,(req,res,next)=>{
+app.use('/admin',auth);
 
-    console.log("success");
-    next();  // pass the  control of the request to the next request handler
-    // res.send("authenticate");
-});
-app.use('/admin',(req,res,next)=>{
+app.get('/admin',(req,res,next)=>{
         console.log("Admin");
         res.send("Authenticated the admin ");
 });
-app.use('/user',UserAuth,(req,res,next)=>{
-        console.log("User");
-        next();
-})
-app.use('/user',(rq,res)=>{
+app.use('/user',UserAuth);
+
+app.get('/user',(rq,res)=>{
     console.log("second");
     res.send("authentic user");
 })
