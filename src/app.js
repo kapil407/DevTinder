@@ -1,6 +1,7 @@
 import express from "express";
 const app=express();
-import { auth } from "../Middleware/Authentication.js";
+import { auth,UserAuth } from "../Middleware/Authentication.js";
+
 // in express , firstly request comes and match the route from top to bottom and send response 
 // app.use('/user',(req,res,next)=>{
 //     console.log("first Handler!!");
@@ -20,9 +21,17 @@ app.use('/admin',auth,(req,res,next)=>{
     next();  // pass the  control of the request to the next request handler
     // res.send("authenticate");
 });
-app.use('/admin',auth,(req,res,next)=>{
-        console.log("second");
+app.use('/admin',(req,res,next)=>{
+        console.log("Admin");
         res.send("Authenticated the admin ");
+});
+app.use('/user',UserAuth,(req,res,next)=>{
+        console.log("User");
+        next();
+})
+app.use('/user',(rq,res)=>{
+    console.log("second");
+    res.send("authentic user");
 })
 
 
