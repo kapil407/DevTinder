@@ -1,15 +1,31 @@
 import express from "express";
 const app=express();
+import { auth } from "../Middleware/Authentication.js";
 // in express , firstly request comes and match the route from top to bottom and send response 
-app.use('/user',(req,res,next)=>{
-    console.log("first Handler!!");
-    next();
+// app.use('/user',(req,res,next)=>{
+//     console.log("first Handler!!");
+//     next();
+// });
+// app.get('/user',(req,res,next)=>{
+//     console.log("1 Handler");
+//     next();
+//     res.send("first handler");
+// });
+
+// AUTHENTICATION USING MIDDLEWARE FUNCTION
+
+app.use('/admin',auth,(req,res,next)=>{
+
+    console.log("success");
+    next();  // pass the  control of the request to the next request handler
+    // res.send("authenticate");
 });
-app.get('/user',(req,res,next)=>{
-    console.log("1 Handler");
-    next();
-    res.send("first handler");
-});
+app.use('/admin',auth,(req,res,next)=>{
+        console.log("second");
+        res.send("Authenticated the admin ");
+})
+
+
 
 
 // },
