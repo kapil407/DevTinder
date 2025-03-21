@@ -17,16 +17,22 @@ import { auth,UserAuth } from "../Middleware/Authentication.js";
 
 app.use('/admin',auth);
 
-app.get('/admin',(req,res,next)=>{
+app.get('/admin/getdata',(req,res,next)=>{
         console.log("Admin");
-        res.send("Authenticated the admin ");
+        res.send("get data ");
 });
-app.use('/user',UserAuth);
-
-app.get('/user',(rq,res)=>{
-    console.log("second");
-    res.send("authentic user");
+app.get('/admin/DeleteAllData',(req,res)=>{
+    res.send("delete all data");
 })
+app.use('/user/logging',(req,res)=>{  // we do not need authenticate for logging 
+        res.send("logging succesfully!!");
+});
+
+app.use('/user/getdata',UserAuth,(req,res)=>{
+    console.log("getting data");
+    res.send("sent data");
+});
+
 
 
 
