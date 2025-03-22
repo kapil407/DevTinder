@@ -16,13 +16,13 @@ app.post("/signup",async (req,res)=>{
                                                         emailId:"kapil@gmail.com",
                                                         passward:"japil1235"
                                                     }
-                                                     */
+                                                      */
     try{
    await User.save();
     res.send("data is save successfully");
     }
     catch(err){
-        res.staus(400).send("Error is "+ err.message);
+        res.status(400).send("Error is "+ err.message);
     }
 });
 
