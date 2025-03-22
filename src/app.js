@@ -7,15 +7,19 @@ const app=express();
 
 
 app.post("/signup",async (req,res)=>{
-    const userObj={
+    const User=new user({
         firstName:"kapil",
         lastName:"kumar",
         emailId:"kapil@gmail.com",
         passward:"japil1235"
-    }
-    const User=new user(userObj);
+    });
+    try{
    await User.save();
     res.send("data is save successfully");
+    }
+    catch(err){
+        res,staus(4000).save("Error is "+ err.message);
+    }
 });
 
  
