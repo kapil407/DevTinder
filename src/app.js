@@ -41,17 +41,6 @@ app.use(express.json());
 //             res.status(404).send("somtthing went wrong");
 //         }
 // });
-app.delete('/user',async (req,res)=>{
-     const userId=req.body._id;
-     try{
-            const UserId=await user.findByIdAndDelete({_id:userId});
-            res.send("user successfully delete");
-     }
-     catch(err){
-        res.status(404).send("something went wrong");
-     }
-
-})
 
 // fetch all user from data base
 // app.use('/user',async (req,res)=>{
@@ -68,6 +57,34 @@ app.delete('/user',async (req,res)=>{
 //         res.status(404).send("something went wrong ");
 //     }
 // })
+
+// app.delete('/user',async (req,res)=>{
+//      const userId=req.body._id;
+//      try{
+//             const UserId=await user.findByIdAndDelete({_id:userId});
+//             res.send("user successfully delete");
+//      }
+//      catch(err){
+//         res.status(404).send("something went wrong");
+//      }
+
+// })
+
+app.patch('/user',async (req,res)=>{
+        const userId=req.body._id;
+        const data=req.body;
+        try{
+            const Userdata= await user.findByIdAndUpdate({_id:userId},data);
+            console.log(data);
+         
+           res.send("data update successfully");
+        }
+        catch(err){
+            res.status(404).send("something went wrong ");
+        }
+})
+
+
  
  
 
