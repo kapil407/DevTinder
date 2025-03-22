@@ -25,22 +25,33 @@ app.use(express.json());
 //     }
 // });
 
-app.get('/user',async (req,res)=>{    // fetch data by emailId 
-        const userId=req.body._id;
-        try{
-        const User=await user.findById({_id:userId});  // it return an array of object
-        if(User.length===0){
-            res.status(404).send("user not found");
-        }    
-        else{
-              res.send(User);
-        } 
+// app.get('/user',async (req,res)=>{    // fetch data by emailId 
+//         const userId=req.body._id;
+//         try{
+//         const User=await user.findById({_id:userId});  // it return an array of object
+//         if(User.length===0){
+//             res.status(404).send("user not found");
+//         }    
+//         else{
+//               res.send(User);
+//         } 
       
-        }
-        catch(err){
-            res.status(404).send("somtthing went wrong");
-        }
-});
+//         }
+//         catch(err){
+//             res.status(404).send("somtthing went wrong");
+//         }
+// });
+app.delete('/user',async (req,res)=>{
+     const userId=req.body._id;
+     try{
+            const UserId=await user.findByIdAndDelete({_id:userId});
+            res.send("user successfully delete");
+     }
+     catch(err){
+        res.status(404).send("something went wrong");
+     }
+
+})
 
 // fetch all user from data base
 // app.use('/user',async (req,res)=>{
