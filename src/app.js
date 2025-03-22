@@ -1,7 +1,21 @@
 import express from "express";
 import { connectDb } from "./config/database.js";
+import  { user } from "./Models/user.js"
 const app=express();
 
+
+app.post("/signup",async (req,res)=>{
+    const userObj={
+        firstName:"kapil",
+        lastName:"kumar",
+        emailId:"kapil@gmail.com",
+        passward:"japil1235"
+    }
+});
+
+ const User=new user(userObj);
+    User.save();
+ res.send("data is save successfully");
 
 connectDb().then(()=>{
     console.log("db connect sucessfully");

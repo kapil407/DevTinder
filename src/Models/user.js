@@ -23,4 +23,4 @@ const UserSchema=new mongoose.Schema({
 
 
 });
-export const User=mongoose.model("User",UserSchema); // first document made for whom and second is its schema name 
+export const user=mongoose.model("User",UserSchema); // first document made for whom and second is its schema name 
