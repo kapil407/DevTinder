@@ -5,20 +5,24 @@ import {user} from "./Models/User.js";
 
 const app=express();
 
+app.use(express.json());
 
 app.post("/signup",async (req,res)=>{
-    const User=new user({
-        firstName:"kapil",
-        lastName:"kumar",
-        emailId:"kapil@gmail.com",
-        passward:"japil1235"
-    });
+    const User=new user(req.body);  
+    console.log(req.body);                         /*
+                                                    {
+                                                        firstName:"kapil",
+                                                        lastName:"kumar",
+                                                        emailId:"kapil@gmail.com",
+                                                        passward:"japil1235"
+                                                    }
+                                                     */
     try{
    await User.save();
     res.send("data is save successfully");
     }
     catch(err){
-        res,staus(4000).save("Error is "+ err.message);
+        res.staus(400).send("Error is "+ err.message);
     }
 });
 
