@@ -7,23 +7,23 @@ const app=express();
 
 app.use(express.json());
 
-// app.post("/signup",async (req,res)=>{
-//     const User=new user(req.body);  
-//     console.log(req.body);                         /*
+app.post("/signup",async (req,res)=>{
+    const User=new user(req.body);  
+    console.log(req.body);                         /*
 //                                                      {
 //                                                         firstName:"kapil",
 //                                                         lastName:"kumar",
 //                                                       emailId:"kapil@gmail.com",
 //                                                        passward:"japil1235"                                         }
 //                                                        */
-//     try{
-//    await User.save();
-//     res.send("data is save successfully");
-//     }
-//     catch(err){
-//         res.status(400).send("Error is "+ err.message);
-//     }
-// });
+    try{
+   await User.save();
+    res.send("data is save successfully");
+    }
+    catch(err){
+        res.status(400).send("Error is "+ err.message);
+    }
+});
 
 // app.get('/user',async (req,res)=>{    // fetch data by emailId 
 //         const userId=req.body._id;
@@ -74,13 +74,14 @@ app.patch('/user',async (req,res)=>{
         const userId=req.body._id;
         const data=req.body;
         try{
-            const Userdata= await user.findByIdAndUpdate({_id:userId},data);
+            const Userdata= await user.findByIdAndUpdate({_id:userId},data,{ runValidators:true});
             console.log(data);
+           
          
            res.send("data update successfully");
         }
         catch(err){
-            res.status(404).send("something went wrong ");
+            res.status(404).send("something went wrong "+err.message);
         }
 })
 
