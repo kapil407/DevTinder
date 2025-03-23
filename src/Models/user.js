@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import validator from "validator";
+
 
 
 const UserSchema=new mongoose.Schema({
@@ -14,15 +16,28 @@ const UserSchema=new mongoose.Schema({
             type:String,
             required:true,
             
-            // ye ke baar karne par hames ake liye parmanent ho jata hai jab tak ki ham khud manually use delete na kare
+            // ye ek baar karne par hames ake liye parmanent ho jata hai jab tak ki ham khud manually use delete na kare
             unique:true,
             
             lowercase:true,
             trim:true,
+            validate(value){
+                if(!validator.isEmail(value)){
+                    throw new Error("Enter valid emailId");
+                    
+                }
+            }
         },
         passward:{
             type:String,
-            min:5
+            required:true,
+            min:5,
+            validate(value){
+                if(!validator.isStrongPassword(value)){
+                    throw new Error("Enter the strong passward");
+                    
+                }
+            }
         },
         age:{
             min:18,
@@ -43,11 +58,9 @@ const UserSchema=new mongoose.Schema({
         skills:{
             type:[String]
         }
-
-
-
-
-},{
+    },
+    {
     timestamps:true
-});
+    }
+);
 export const user=mongoose.model("User",UserSchema); // first document made for whom and second is its schema name 

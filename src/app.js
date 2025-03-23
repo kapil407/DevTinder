@@ -9,13 +9,8 @@ app.use(express.json());
 
 app.post("/signup",async (req,res)=>{
     const User=new user(req.body);  
-    console.log(req.body);                         /*
-//                                                      {
-//                                                         firstName:"kapil",
-//                                                         lastName:"kumar",
-//                                                       emailId:"kapil@gmail.com",
-//                                                        passward:"japil1235"                                         }
-//                                                        */
+    console.log(req.body);                         
+
     try{
    await User.save();
     res.send("data is save successfully");
@@ -25,22 +20,22 @@ app.post("/signup",async (req,res)=>{
     }
 });
 
-// app.get('/user',async (req,res)=>{    // fetch data by emailId 
-//         const userId=req.body._id;
-//         try{
-//         const User=await user.findById({_id:userId});  // it return an array of object
-//         if(User.length===0){
-//             res.status(404).send("user not found");
-//         }    
-//         else{
-//               res.send(User);
-//         } 
+app.get('/user',async (req,res)=>{    // fetch data by emailId 
+        const userId=req.body._id;
+        try{
+        const User=await user.findById({_id:userId});  // it return an array of object
+        if(User.length===0){
+            res.status(404).send("user not found");
+        }    
+        else{
+              res.send(User);
+        } 
       
-//         }
-//         catch(err){
-//             res.status(404).send("somtthing went wrong");
-//         }
-// });
+        }
+        catch(err){
+            res.status(404).send("somtthing went wrong");
+        }
+});
 
 // fetch all user from data base
 // app.use('/user',async (req,res)=>{
@@ -58,23 +53,39 @@ app.post("/signup",async (req,res)=>{
 //     }
 // })
 
-// app.delete('/user',async (req,res)=>{
-//      const userId=req.body._id;
-//      try{
-//             const UserId=await user.findByIdAndDelete({_id:userId});
-//             res.send("user successfully delete");
-//      }
-//      catch(err){
-//         res.status(404).send("something went wrong");
-//      }
+app.delete('/user',async (req,res)=>{
+     const userId=req.body._id;
+     try{
+            const UserId=await user.findByIdAndDelete({_id:userId});
+            res.send("user successfully delete");
+     }
+     catch(err){
+        res.status(404).send("something went wrong");
+     }
 
-// })
+})
 
-app.patch('/user',async (req,res)=>{
-        const userId=req.body._id;
+app.patch('/user/:userId',async (req,res)=>{
+        const userid=req.params?.userId;
+        console.log(userid);
         const data=req.body;
         try{
-            const Userdata= await user.findByIdAndUpdate({_id:userId},data,{ runValidators:true});
+
+         const ALLOWED_DATA=["age","skills","gender"]; // data jo update ke liye allow hai
+        
+         const isUpdateAllowed=Object.keys(data).every((k)=>{   // pure js code for validation on updatesData for user
+                  return  ALLOWED_DATA.includes(k)
+                });
+        
+                if(!isUpdateAllowed){
+                    throw new Error("update is not allow");
+                }
+               if(data?.skills.length > 10){
+                    throw new Error("skills can not be more than 10");
+                    
+               }
+
+            const Userdata= await user.findByIdAndUpdate({_id:userid},data,{ runValidators:true});
             console.log(data);
            
          
