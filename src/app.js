@@ -8,6 +8,8 @@ const app=express();
 
 app.use(express.json());
 
+
+
 app.post("/signup",async (req,res)=>{
    try{
     // validation SignUp data   
@@ -33,6 +35,26 @@ app.post("/signup",async (req,res)=>{
     }
 });
 
+// Login Authentication
+app.post('/login',async (req,res)=>{
+    try{
+    const {emailId,passward}=req.body;
+        const User=await user.findOne({emailId:emailId});// check that user in the database or not id yes then fetch  
+        if(!User){
+            throw new Error("invalid emailId"); 
+        }
+       const isValidePassword= await bcrypt.compare(passward,User.passward); // compare password with login password
+       if(!isValidePassword){
+            throw new Error("incorrect password");
+            
+       }
+       res.send("login suceessfully");
+    }
+    catch(err){
+        res.status(404).send("ERROR "+err.message);
+    }
+})
+
 app.get('/user',async (req,res)=>{    // fetch data by emailId 
         const userId=req.body._id;
         try{
@@ -51,20 +73,20 @@ app.get('/user',async (req,res)=>{    // fetch data by emailId
 });
 
 // fetch all user from data base
-// app.use('/user',async (req,res)=>{
+app.get('/user',async (req,res)=>{
 
-//     try{
-//        const users=await user.find({});   // fetch all users's data from dataBase
-//        if(!users.length){
-//         res.status(404).send("users not found");
+    try{
+       const users=await user.find({});   // fetch all users's data from dataBase
+       if(!users.length){
+        res.status(404).send("users not found");
 
-//        }
-//        else res.send(users);
-//     }
-//     catch(err){
-//         res.status(404).send("something went wrong ");
-//     }
-// })
+       }
+       else res.send(users);
+    }
+    catch(err){
+        res.status(404).send("something went wrong ");
+    }
+})
 
 app.delete('/user',async (req,res)=>{
      const userId=req.body._id;
