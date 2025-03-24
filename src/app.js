@@ -1,22 +1,35 @@
 import express from "express";
 import { connectDb } from "./config/database.js";
 import {user} from "./Models/User.js";
-
+import bcrypt from "bcrypt";
+import {validateSignUpData} from './Utils/Validation.js'
 
 const app=express();
 
 app.use(express.json());
 
 app.post("/signup",async (req,res)=>{
-    const User=new user(req.body);  
-    console.log(req.body);                         
+   try{
+    // validation SignUp data   
+    validateSignUpData(req);
+    const {firstName,lastName,emailId,passward} = req.body;
+    // bcrypt passward
+    const hashPassward=await bcrypt.hash(passward,10); // convert the plain text passward into the cipher text
+        
+    const User=new user({
+        firstName,
+        lastName,
+        emailId,
+        passward:hashPassward
+    });  
+                       
 
-    try{
+   
    await User.save();
     res.send("data is save successfully");
     }
     catch(err){
-        res.status(400).send("Error is "+ err.message);
+        res.status(400).send("ERROR "+ err.message);
     }
 });
 
