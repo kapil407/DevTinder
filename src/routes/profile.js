@@ -2,6 +2,8 @@ import express from 'express' ;
 const profileRouter=express.Router();
 
 import { UserAuth } from "../../Middleware/Authentication.js";
+import authRouter from './auth.js';
+import bcrypt from "bcrypt";
 
 
 
@@ -22,11 +24,12 @@ profileRouter.get('/profile', UserAuth, async (req,res)=>{
 
 //  edit or udate profile 
 
- profileRouter.post('/profile/edit',UserAuth, async (req,res)=>{
+ profileRouter.patch('/profile/edit',UserAuth, async (req,res)=>{
               
             try{
 
             const allowedEdit=["firstName","lastName","age","skills","photoUrl"];
+
             const isValide=Object.keys(req.body).every(key=>allowedEdit.includes(key));
                 
             if(!isValide){
@@ -34,6 +37,7 @@ profileRouter.get('/profile', UserAuth, async (req,res)=>{
                 }
 
              const loginedUser=req.User;
+
              Object.keys(req.body).forEach((field)=>loginedUser[field]=req.body[field]);
             
             await loginedUser.save();
@@ -43,6 +47,27 @@ profileRouter.get('/profile', UserAuth, async (req,res)=>{
             catch(err){
                 res.status(400).json({err: err.message});
             }    
+ });
+
+ // Update the password incase of forgot password
+
+ authRouter.patch('/profile/passward',UserAuth,async (req,res)=>{
+              
+            try{
+                const User=req.User;
+                const {passward}=User;
+                // console.log(passward);
+               const hashPassward=await bcrypt.hash(req.body.passward,10);
+          
+               req.User.passward=hashPassward;
+               await User.save();
+                // console.log(passward);
+                res.json({message:`${User.firstName} Your password updated successfully`});
+
+            }
+            catch(err){
+                res.status(400).send("Error  "+err.message);
+            }
  });
 
  export default profileRouter;
